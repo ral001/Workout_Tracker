@@ -145,7 +145,7 @@
 <div id="app">
   <div class="header">
     <h1>Workout Log</h1>
-    <div class="sub">Strength &amp; Mobility · 50+ · KB + Pull-up bar</div>
+    <div class="sub">Iron &amp; Flow · 50+ · KB + Pull-up bar · 12-week cycle</div>
     <div class="date-row">
       <button class="date-nav" onclick="shiftDay(-1)">‹</button>
       <span class="date-label" id="dateLabel"></span>
@@ -195,65 +195,71 @@
 <script>
 const DEFAULT_PROGRAM = [
   {
-    name: "Day 1 — Lower Strength",
+    name: "Day 1 · Mon — Lower Strength",
     exercises: [
-      { block:"Warm-up · 10 min",        name:"Hip circles + leg swings",       target:"2 × 10 each",              type:"timed"    },
-      { block:"Warm-up · 10 min",        name:"KB deadlift (light)",             target:"2 × 8",                    type:"strength", sets:2, reps:8,  weight:0 },
-      { block:"Warm-up · 10 min",        name:"90/90 hip stretch",               target:"2 min hold",               type:"timed"    },
-      { block:"Strength block · 30 min", name:"KB double front squat",           target:"4 × 5 heavy",              type:"strength", sets:4, reps:5,  weight:0 },
-      { block:"Strength block · 30 min", name:"KB Romanian deadlift",            target:"4 × 6",                    type:"strength", sets:4, reps:6,  weight:0 },
-      { block:"Strength block · 30 min", name:"Single-leg KB deadlift",          target:"3 × 6 each",               type:"strength", sets:3, reps:6,  weight:0 },
-      { block:"Strength block · 30 min", name:"Goblet squat to stand",           target:"3 × 8",                    type:"strength", sets:3, reps:8,  weight:0 },
-      { block:"Cardio finish · 20 min",  name:"Brisk walk (Zone 2)",             target:"20 min",                   type:"cardio"   },
-      { block:"Mobility cool-down · 10 min", name:"Couch stretch",               target:"90 sec each side",         type:"timed"    },
-      { block:"Mobility cool-down · 10 min", name:"Pigeon pose",                 target:"90 sec each side",         type:"timed"    }
+      { block:"Warm-up · 10 min",             name:"Hip circles + leg swings",        target:"2 × 10 each",                   type:"timed"                              },
+      { block:"Warm-up · 10 min",             name:"KB deadlift (light)",              target:"2 × 8",                         type:"strength", sets:2,  reps:8,  weight:0 },
+      { block:"Warm-up · 10 min",             name:"90/90 hip stretch",                target:"2 min hold",                    type:"timed"                              },
+      { block:"Strength block · 30 min",      name:"KB double front squat",            target:"4 × 5 heavy",                   type:"strength", sets:4,  reps:5,  weight:0 },
+      { block:"Strength block · 30 min",      name:"KB Romanian deadlift",             target:"4 × 6",                         type:"strength", sets:4,  reps:6,  weight:0 },
+      { block:"Strength block · 30 min",      name:"Single-leg KB deadlift",           target:"3 × 6 each side",               type:"strength", sets:3,  reps:6,  weight:0 },
+      { block:"Strength block · 30 min",      name:"Goblet squat to stand",            target:"3 × 8",                         type:"strength", sets:3,  reps:8,  weight:0 },
+      { block:"Carry finisher · 8 min",       name:"KB farmer carry",                  target:"4 × 40m per hand",              type:"timed"                              },
+      { block:"Carry finisher · 8 min",       name:"Dead hang",                        target:"3 × 30 sec",                    type:"timed"                              },
+      { block:"Cardio · 20 min",              name:"Brisk walk (Zone 2)",              target:"20 min · 60–70% MHR",           type:"cardio"                             },
+      { block:"Mobility cool-down · 10 min",  name:"Couch stretch",                    target:"90 sec each side",              type:"timed"                              },
+      { block:"Mobility cool-down · 10 min",  name:"Pigeon pose",                      target:"90 sec each side",              type:"timed"                              }
     ]
   },
   {
-    name: "Day 2 — Upper + Pull",
+    name: "Day 2 · Wed — Upper + Pull",
     exercises: [
-      { block:"Warm-up · 10 min",           name:"Shoulder CARs",                target:"3 circles each",           type:"timed"    },
-      { block:"Warm-up · 10 min",           name:"Band pull-aparts / arm swings", target:"2 × 15",                  type:"strength", sets:2, reps:15, weight:0 },
-      { block:"Warm-up · 10 min",           name:"Thoracic rotations",            target:"8 each side",             type:"timed"    },
-      { block:"Strength block · 30 min",    name:"Pull-ups (weighted if possible)",target:"4 × 4–6",                type:"strength", sets:4, reps:5,  weight:0 },
-      { block:"Strength block · 30 min",    name:"KB single-arm press",           target:"4 × 5 each",              type:"strength", sets:4, reps:5,  weight:0 },
-      { block:"Strength block · 30 min",    name:"KB bent-over row",              target:"3 × 8 each",              type:"strength", sets:3, reps:8,  weight:0 },
-      { block:"Strength block · 30 min",    name:"KB floor press",                target:"3 × 8",                   type:"strength", sets:3, reps:8,  weight:0 },
-      { block:"Strength block · 30 min",    name:"Hollow body hold",              target:"3 × 20 sec",              type:"timed"    },
-      { block:"KB conditioning · 15 min",   name:"KB swing EMOM",                 target:"15 min · 10 swings/min",  type:"cardio"   },
-      { block:"Mobility cool-down · 10 min",name:"Doorway chest stretch",         target:"90 sec",                  type:"timed"    },
-      { block:"Mobility cool-down · 10 min",name:"Child's pose + lat stretch",    target:"90 sec each",             type:"timed"    }
+      { block:"Warm-up · 10 min",             name:"Shoulder CARs",                    target:"3 circles each direction",      type:"timed"                              },
+      { block:"Warm-up · 10 min",             name:"Band pull-aparts / arm swings",    target:"2 × 15",                        type:"strength", sets:2,  reps:15, weight:0 },
+      { block:"Warm-up · 10 min",             name:"Thoracic rotations",               target:"8 each side",                   type:"timed"                              },
+      { block:"Warm-up · 10 min",             name:"Dead hang",                        target:"2 × 30 sec",                    type:"timed"                              },
+      { block:"Strength block · 30 min",      name:"Pull-ups (weighted by week)",      target:"4–6 × 4–6 reps",                type:"strength", sets:4,  reps:5,  weight:0 },
+      { block:"Strength block · 30 min",      name:"KB single-arm press",              target:"4 × 5 each side",               type:"strength", sets:4,  reps:5,  weight:0 },
+      { block:"Strength block · 30 min",      name:"KB bent-over row",                 target:"3 × 8 each side",               type:"strength", sets:3,  reps:8,  weight:0 },
+      { block:"Strength block · 30 min",      name:"KB floor press",                   target:"3 × 8",                         type:"strength", sets:3,  reps:8,  weight:0 },
+      { block:"Strength block · 30 min",      name:"Hollow body hold",                 target:"3 × 20 sec",                    type:"timed"                              },
+      { block:"KB conditioning · 16–24 min",  name:"KB swing EMOM",                    target:"16→20→24 min · 10–15 swings",   type:"cardio"                             },
+      { block:"Mobility cool-down · 10 min",  name:"Doorway chest stretch",            target:"90 sec",                        type:"timed"                              },
+      { block:"Mobility cool-down · 10 min",  name:"Child's pose + lat stretch",       target:"90 sec each side",              type:"timed"                              }
     ]
   },
   {
-    name: "Day 3 — Cardio + Mobility",
+    name: "Day 3 · Thu/Fri — Cardio + Mobility",
     exercises: [
-      { block:"Zone 2 walk · 40–50 min",       name:"Sustained brisk walk",          target:"40–50 min, conversational pace", type:"cardio" },
-      { block:"Full-body mobility · 25 min",   name:"World's greatest stretch",      target:"5 each side",              type:"timed"    },
-      { block:"Full-body mobility · 25 min",   name:"KB Turkish get-up (light)",     target:"3 × 1 each side",          type:"strength", sets:3, reps:1, weight:0 },
-      { block:"Full-body mobility · 25 min",   name:"Deep squat breathing",          target:"3 min",                    type:"timed"    },
-      { block:"Full-body mobility · 25 min",   name:"Spinal rotations floor",        target:"10 each side",             type:"timed"    },
-      { block:"Full-body mobility · 25 min",   name:"Ankle circles + calf raises",   target:"2 × 15",                   type:"strength", sets:2, reps:15, weight:0 }
+      { block:"Zone 2 walk · 40–50 min",      name:"Sustained brisk walk",             target:"40–50 min · conversational pace", type:"cardio"                           },
+      { block:"Full-body mobility · 25 min",  name:"KB Turkish get-up (light)",        target:"3–5 × 1 each side — skill focus", type:"strength", sets:3, reps:1, weight:0 },
+      { block:"Full-body mobility · 25 min",  name:"World's greatest stretch",         target:"5 each side",                   type:"timed"                              },
+      { block:"Full-body mobility · 25 min",  name:"Deep squat breathing",             target:"3 min",                         type:"timed"                              },
+      { block:"Full-body mobility · 25 min",  name:"Spinal rotations (floor)",         target:"10 each side",                  type:"timed"                              },
+      { block:"Full-body mobility · 25 min",  name:"Ankle circles + calf raises",      target:"2 × 15",                        type:"strength", sets:2,  reps:15, weight:0 },
+      { block:"Full-body mobility · 25 min",  name:"Thoracic bridge",                  target:"3 × 10",                        type:"strength", sets:3,  reps:10, weight:0 }
     ]
   },
   {
-    name: "Day 4 — Full-body Strength",
+    name: "Day 4 · Sat — Full-body Strength",
     exercises: [
-      { block:"Warm-up · 10 min",           name:"KB halo + prying goblet squat", target:"2 × 5 each",              type:"strength", sets:2, reps:5, weight:0 },
-      { block:"Warm-up · 10 min",           name:"Hip CARs + thoracic opens",     target:"5 each",                  type:"timed"    },
-      { block:"Strength complex · 35 min",  name:"KB clean + press",              target:"5 × 3 each, heavy",       type:"strength", sets:5, reps:3, weight:0 },
-      { block:"Strength complex · 35 min",  name:"Pull-ups",                      target:"4 × max reps",            type:"strength", sets:4, reps:0, weight:0 },
-      { block:"Strength complex · 35 min",  name:"KB suitcase carry",             target:"3 × 30m each side",       type:"timed"    },
-      { block:"Strength complex · 35 min",  name:"Pistol squat / box step-down",  target:"3 × 5 each",              type:"strength", sets:3, reps:5, weight:0 },
-      { block:"Strength complex · 35 min",  name:"Plank + shoulder taps",         target:"3 × 20 taps",             type:"timed"    },
-      { block:"Finisher · 10 min",          name:"KB swing + goblet squat ladder",target:"5–4–3–2–1",               type:"timed"    },
-      { block:"Mobility cool-down · 10 min",name:"Full-body floor flow",          target:"10 min",                  type:"timed"    }
+      { block:"Warm-up · 10 min",             name:"KB halo + prying goblet squat",    target:"2 × 5 each",                    type:"strength", sets:2,  reps:5,  weight:0 },
+      { block:"Warm-up · 10 min",             name:"Hip CARs + thoracic opens",        target:"5 each",                        type:"timed"                              },
+      { block:"Strength complex · 35 min",    name:"KB clean + press",                 target:"5 × 3 each — heavy",            type:"strength", sets:5,  reps:3,  weight:0 },
+      { block:"Strength complex · 35 min",    name:"KB snatch",                        target:"4 × 4–5 per side",              type:"strength", sets:4,  reps:4,  weight:0 },
+      { block:"Strength complex · 35 min",    name:"Pull-ups",                         target:"4 × max reps",                  type:"strength", sets:4,  reps:0,  weight:0 },
+      { block:"Strength complex · 35 min",    name:"KB suitcase carry",                target:"3 × 30m each side",             type:"timed"                              },
+      { block:"Strength complex · 35 min",    name:"Pistol squat / box step-down",     target:"3 × 5 each side",               type:"strength", sets:3,  reps:5,  weight:0 },
+      { block:"Strength complex · 35 min",    name:"Plank + shoulder taps",            target:"3 × 20 taps",                   type:"timed"                              },
+      { block:"Finisher · 10 min",            name:"KB swing + goblet squat ladder",   target:"5-4-3-2-1 reps",                type:"timed"                              },
+      { block:"Mobility cool-down · 10 min",  name:"Full-body floor flow",             target:"10 min",                        type:"timed"                              },
+      { block:"Mobility cool-down · 10 min",  name:"90/90 hip stretch",                target:"2 min per side",                type:"timed"                              }
     ]
   }
 ];
 
-let program = JSON.parse(localStorage.getItem('wl_program') || 'null') || JSON.parse(JSON.stringify(DEFAULT_PROGRAM));
-let logs    = JSON.parse(localStorage.getItem('wl_logs')    || '{}');
+let program = JSON.parse(localStorage.getItem('wl_program_v2') || 'null') || JSON.parse(JSON.stringify(DEFAULT_PROGRAM));
+let logs    = JSON.parse(localStorage.getItem('wl_logs_v2')    || '{}');
 let currentDate = new Date();
 
 function dateKey(d) { return d.toISOString().split('T')[0]; }
@@ -267,8 +273,8 @@ function formatDate(d) {
   return d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
 }
 function save() {
-  localStorage.setItem('wl_program', JSON.stringify(program));
-  localStorage.setItem('wl_logs',    JSON.stringify(logs));
+  localStorage.setItem('wl_program_v2', JSON.stringify(program));
+  localStorage.setItem('wl_logs_v2',    JSON.stringify(logs));
 }
 function toast(msg) {
   const t = document.getElementById('toast');
