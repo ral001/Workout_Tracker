@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -97,6 +97,7 @@
   .sets-table tbody tr.set-done-row td { opacity: 0.5; }
   .sets-table td { padding: 5px 4px; vertical-align: middle; }
   .sets-table td:first-child { font-size: 12px; font-weight: 600; color: var(--text3); text-align: left; }
+  .sets-table td.set-target { font-size: 14px; font-weight: 600; color: var(--text2); text-align: center; }
   .set-input { width: 100%; border: 0.5px solid var(--border); border-radius: 6px; padding: 6px 4px; font-size: 14px; text-align: center; background: var(--surface2); color: var(--text); font-family: inherit; }
   .set-input:focus { outline: none; border-color: var(--accent); background: var(--surface); }
   .set-check { width: 22px; height: 22px; accent-color: var(--green); cursor: pointer; display: block; margin: 0 auto; }
@@ -262,6 +263,27 @@ let program = JSON.parse(localStorage.getItem('wl_program_v2') || 'null') || JSO
 let logs    = JSON.parse(localStorage.getItem('wl_logs_v2')    || '{}');
 let currentDate = new Date();
 
+// ── One-time target update: Week 2 (Build) loads ──────────
+// Matches exercises by name and sets ex.weight as the displayed target.
+// Bump TARGETS_VERSION each wave to roll targets to the next week.
+const WAVE_TARGETS = {
+  "KB double front squat":        32,
+  "KB Romanian deadlift":         32,
+  "Pull-ups (weighted by week)":   5,
+  "KB single-arm press":          24,
+  "KB clean + press":             28,
+  "KB snatch":                    24,
+  "KB Turkish get-up (light)":    20
+};
+const TARGETS_VERSION = 'wave-w2-build';
+if (localStorage.getItem('wl_targets_applied') !== TARGETS_VERSION) {
+  program.forEach(day => day.exercises.forEach(ex => {
+    if (Object.prototype.hasOwnProperty.call(WAVE_TARGETS, ex.name)) ex.weight = WAVE_TARGETS[ex.name];
+  }));
+  localStorage.setItem('wl_targets_applied', TARGETS_VERSION);
+  localStorage.setItem('wl_program_v2', JSON.stringify(program));
+}
+
 function dateKey(d) { return d.toISOString().split('T')[0]; }
 function formatDate(d) {
   const today = new Date(); today.setHours(0,0,0,0);
@@ -360,6 +382,7 @@ function renderLog() {
     let fieldsHtml = '';
     if (isStrength) {
       // Build one row per prescribed set
+      const tgt = ex.weight > 0 ? ex.weight : '—';
       let rows = '';
       for (let s = 0; s < numSets; s++) {
         const setData = exData.sets[s] || {};
@@ -367,7 +390,8 @@ function renderLog() {
         rows += `
           <tr class="${isDone ? 'set-done-row' : ''}" data-ex="${i}" data-set="${s}">
             <td>S${s + 1}</td>
-            <td><input class="set-input" type="number" inputmode="decimal" placeholder="${ex.weight > 0 ? ex.weight : '—'}" value="${esc(setData.weight||'')}" data-ex="${i}" data-set="${s}" data-field="weight"></td>
+            <td class="set-target">${tgt}</td>
+            <td><input class="set-input" type="number" inputmode="decimal" placeholder="${tgt}" value="${esc(setData.weight||'')}" data-ex="${i}" data-set="${s}" data-field="weight"></td>
             <td><input class="set-input" type="number" inputmode="numeric" placeholder="${ex.reps > 0 ? ex.reps : '—'}" value="${esc(setData.reps||'')}" data-ex="${i}" data-set="${s}" data-field="reps"></td>
             <td><input class="set-check" type="checkbox" ${isDone ? 'checked' : ''} data-ex="${i}" data-set="${s}" data-field="done"></td>
           </tr>`;
@@ -376,7 +400,8 @@ function renderLog() {
         <table class="sets-table">
           <thead><tr>
             <th></th>
-            <th>Wt kg</th>
+            <th>Target</th>
+            <th>Actual</th>
             <th>Reps</th>
             <th>✓</th>
           </tr></thead>
@@ -484,7 +509,7 @@ function renderProgram() {
       <div class="prog-col-labels">
         <span class="col-label">Exercise</span>
         <span class="col-label">Prescription</span>
-        <span class="col-label">Wt kg</span>
+        <span class="col-label">Target</span>
         <span></span>
       </div>
       ${rowsHtml}
@@ -528,7 +553,7 @@ function renderExport() {
 }
 
 function exportCSV() {
-  const rows=[['Date','Day','Block','Exercise','Prescription','Type','Set','Weight (kg)','Reps','Duration/Notes','Set Done','Comment']];
+  const rows=[['Date','Day','Block','Exercise','Prescription','Type','Set','Target (kg)','Weight (kg)','Reps','Duration/Notes','Set Done','Comment']];
   Object.keys(logs).sort().forEach(dk => {
     const entry=logs[dk], day=program[entry.dayIdx||0];
     if (!day) return;
@@ -541,12 +566,12 @@ function exportCSV() {
         for (let s = 0; s < numSets; s++) {
           const sd = setsData[s] || {};
           rows.push([dk, day.name, ex.block||'', ex.name, ex.target, ex.type,
-            s+1, sd.weight||'', sd.reps||'', '', sd.done?'Yes':'No',
+            s+1, ex.weight||'', sd.weight||'', sd.reps||'', '', sd.done?'Yes':'No',
             s===0 ? comment : '""']);
         }
       } else {
         rows.push([dk, day.name, ex.block||'', ex.name, ex.target, ex.type||'',
-          '', '', '', r.duration||'', r.done?'Yes':'No', comment]);
+          '', '', '', '', r.duration||'', r.done?'Yes':'No', comment]);
       }
     });
   });
